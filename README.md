@@ -3,7 +3,8 @@
 My solutions for the Advent of Code 2022, 
 see https://adventofcode.com/2022
 
-* **Day 1** (Language): Description of problem (*easy*)
+* **Day 1** (Go): Find the maximum sum of newline-separated 
+  groups of numbers. For part 2, find the sum of the top 3 (*easy*).
 
 To compile and run a **Go** program
 * Change into the directory with the program
