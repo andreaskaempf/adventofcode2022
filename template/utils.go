@@ -18,21 +18,42 @@ func readLines(filename string) []string {
 	return strings.Split(string(data), "\n")
 }
 
-// Parse number
+// Parse an integer, show message and return -1 if error
 func atoi(s string) int {
 	n, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
-		fmt.Println("Could not parse, assuming zero:", s)
-		n = 0
+		fmt.Println("Could not parse integer:", s)
+		n = -1
 	}
 	return int(n)
 }
 
-// Maximum of a list
-func max(l []int) int {
-	var y int
+// Parse a float, show message and return -1 if error
+func atof(s string) float64 {
+	n, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		fmt.Println("Could not parse float:", s)
+		n = -1
+	}
+	return float64(n)
+}
+
+// Maximum of a list (of ints, floats, or strings, using generics)
+func max[T int | float64 | string](l []T) T {
+	var y T
 	for i := 0; i < len(l); i++ {
 		if i == 0 || l[i] > y {
+			y = l[i]
+		}
+	}
+	return y
+}
+
+// Maximum of a list (of ints, floats, or strings, using generics)
+func min[T int | float64 | string](l []T) T {
+	var y T
+	for i := 0; i < len(l); i++ {
+		if i == 0 || l[i] < y {
 			y = l[i]
 		}
 	}
