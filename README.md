@@ -8,6 +8,9 @@ see https://adventofcode.com/2022
 
 * **Day 2** (Go): Rock/Paper/Scissors simulation  (*easy*)
 
+* **Day 3** (Go): Sum up characters that are common in two halves of some
+  strings (Part 1), and common to groups of 3 strings (Part 2) (*easy*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
