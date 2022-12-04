@@ -11,6 +11,10 @@ see https://adventofcode.com/2022
 * **Day 3** (Go, Python): Sum up characters that are common in two halves of
   some strings (Part 1), and common to groups of 3 strings (Part 2) (*easy*)
 
+* **Day 4** (Go): Given pairs of numeric ranges, in how many pairs is one range
+  entirely contained within another (Part 1), and how many pairs overlap at 
+  all (Part 2) (*easy*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
