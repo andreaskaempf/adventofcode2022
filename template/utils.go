@@ -59,3 +59,45 @@ func min[T int | float64 | string](l []T) T {
 	}
 	return y
 }
+
+// Sum of a list
+func sum[T int | float64](l []T) T {
+	var y T
+	for i := 0; i < len(l); i++ {
+		y += l[i]
+	}
+	return y
+}
+
+// Intersection of two lists
+func intersection[T int | int64 | float64 | byte | string](a, b []T) []T {
+	res := []T{}
+	for i := 0; i < len(a); i++ {
+		if in(a[i], b) {
+			res = append(res, a[i])
+		}
+	}
+	return res
+}
+
+// Union of two lists
+func union[T int | int64 | float64 | byte | string](a, b []T) []T {
+	res := []T{}
+	copy(res, a) // warning: this will include duplicates in list a
+	for i := 0; i < len(b); i++ {
+		if !in(b[i], res) {
+			res = append(res, b[i])
+		}
+	}
+	return res
+}
+
+// Is element in a list?
+func in[T int | int64 | float64 | byte | string](c T, s []T) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] == c {
+			return true
+		}
+	}
+	return false
+}

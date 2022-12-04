@@ -8,11 +8,21 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"strings"
 )
 
 func main() {
 
 	// Read the input file
-	lines := readLines("sample.txt")
+	filename := "sample.txt"
+	//filename := "input.txt"
+	data, _ := ioutil.ReadFile(filename)
+	lines := strings.Split(string(data), "\n")
 	fmt.Println(len(lines), "lines read")
+
+	// Process each line
+	for _, l := range lines {
+		fmt.Println(l) // TODO
+	}
 }
