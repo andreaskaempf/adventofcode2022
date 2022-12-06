@@ -1,7 +1,8 @@
 // Advent of Code 2022, Day 06
 //
 // Look for first block of 4 (Part 1) or 14 (Part 2) non-repeating
-// characters in a string.
+// characters in a string. Increased performance 10x by using concurrency
+// and simpler check for duplicate characters.
 //
 // AK, 6 Dec 2022
 
@@ -14,50 +15,57 @@ import (
 
 func main() {
 
-	// Sample values, with expected values
-	samples := []string{"mjqjpqmgbljsphdztnvjfqwrcgsmlb", // 4
-		"bvwbjplbgvbhsrlpgdmjqwftvncz",      // 5
-		"nppdvjthqldpwncqszvftbrmjlhg",      // 6
-		"nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", // 10
-		"zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"}  // 11
+	// Read input from file
+	//data, _ := ioutil.ReadFile("input.txt")
+	data, _ := ioutil.ReadFile("day06_input10000")
+	msg := string(data)
 
-	// Read input, append to list of samples
-	data, _ := ioutil.ReadFile("input.txt")
-	samples = append(samples, string(data))
-
-	// Part 1: Process each line, look for markers of length 4
-	fmt.Println("Part 1")
-	for _, msg := range samples {
-		fmt.Println(marker(msg, 4))
-	}
-
-	// Part 2: Process each line, look for markers of length 14
-	fmt.Println("\nPart 2")
-	for _, msg := range samples {
-		fmt.Println(marker(msg, 14))
-	}
+	// Concurrently look for markers of length 4 (Part 1) and 14 (Part 2),
+	// using a "channel" to allow concurrent processes to return results
+	// when ready (code will continue when both results are sent back)
+	c := make(chan int)       // create the channel
+	go marker(msg, 4, c)      // run the 4-char check in background
+	go marker(msg, 14, c)     // same for 14-char check
+	part1, part2 := <-c, <-c  // collect results when ready
+	fmt.Println(part1, part2) // show results (may be out of order!)
 }
 
 // Find the position of the "marker", i.e., a block where n chars
-// are all different
-func marker(s string, n int) int {
+// are all different, send result to channel
+func marker(s string, n int, c chan int) {
 	for i := n - 1; i < len(s); i++ {
-		substr := s[i-n+1 : i+1]
-		if !duplicates(substr) {
-			return i + 1
+		substr := s[i-n+1 : i+1]  // get n-char substring
+		if !duplicates2(substr) { // no duplicate chars?
+			c <- i + 1 // send back position of marker
+			return
 		}
 	}
-	return -1 // no marker found (should never happen)
+	c <- -1 // no marker found
 }
 
 // Check if a string contains any duplicate characters
+// (slower implementation, using map)
 func duplicates(s string) bool {
 	chars := map[byte]int{}
 	for i := 0; i < len(s); i++ {
 		c := s[i]
-		chars[c] += 1     // remember we found this character
-		if chars[c] > 1 { // duplicate found
+		if chars[c] > 0 { // duplicate found
 			return true
+		}
+		chars[c] += 1 // remember we found this character
+	}
+	return false
+}
+
+// Check if a string contains any duplicate characters,
+// faster implementation using character comparisons inside
+// loops instead of map
+func duplicates2(s string) bool {
+	for i := 0; i < len(s); i++ {
+		for j := 0; j < i; j++ {
+			if s[i] == s[j] {
+				return true
+			}
 		}
 	}
 	return false
