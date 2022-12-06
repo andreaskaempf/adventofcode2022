@@ -18,6 +18,9 @@ see https://adventofcode.com/2022
 * **Day 5** (Go): Simulate execution of instructions to move crates from 
   one tower to another, one at a time (Part 1), or in groups (Part 2) (*easy*)
 
+* **Day 6** (Go): Look for first block of 4 (Part 1) or 14 (Part 2) 
+  non-repeating characters in a string.  (*easy*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
