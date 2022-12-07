@@ -21,6 +21,12 @@ see https://adventofcode.com/2022
 * **Day 6** (Go): Look for first block of 4 (Part 1) or 14 (Part 2) 
   non-repeating characters in a string.  (*easy*)
 
+* **Day 7** (Go): Given a list of Unix shell commands and output (just 
+  ls and cd), parse these and find the sum of space (calculated recursively,
+  i.e., including subdirectories) used by all directories <= 100k (Part 1), 
+  and the size of the smallest directory that would free 
+  up a required amount of space. (*medium*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
