@@ -24,6 +24,7 @@ type Directory struct {
 	parent  *Directory  // pointer to parent directory
 	files   []File      // list of files
 	subdirs []Directory // list of subdirectories
+	size    int         // including subdirectories (memoization)
 }
 
 // Information about one file
@@ -46,7 +47,7 @@ func main() {
 
 	// Process each line: change directories, and build up recursive lists of
 	// files and subdirectories
-	root := Directory{name: "/"} // Create one root directory to start
+	root := Directory{name: "/"} // Start by creating one root directory
 	var curdir *Directory        // Pointer to the current directory, set by "cd" command
 	for _, l := range lines {    // Go through each line of input
 
@@ -70,7 +71,7 @@ func main() {
 					if !found { // New directory does not exist, create it
 						newDir := Directory{name: words[2], parent: curdir}
 						curdir.subdirs = append(curdir.subdirs, newDir)
-						curdir = &curdir.subdirs[len(curdir.subdirs)-1] // can't use &newDir
+						curdir = &curdir.subdirs[len(curdir.subdirs)-1] // not &newDir
 					}
 				}
 			}
@@ -100,10 +101,14 @@ func main() {
 func part2(d *Directory, freeUp int) {
 
 	// Check this directory: does it exceed the space required, and is it
-	// smaller than any solution found so far? Note we don't need to check
-	// to exclude the root directory, since its size will be too big anyway.
-	if d.totSize() >= freeUp && (Part2Size == 0 || d.totSize() < Part2Size) {
-		Part2Size = d.totSize()
+	// smaller than any solution found so far? If so, set the global
+	// variable Part2Size to the directory size.
+	// Note we don't need to check to exclude the root directory, since its
+	// size will be too big anyway.
+	// Assumes that totSize() has already been run on root, so that .size
+	// is calculated for every directory (done in Part 1).
+	if d.size >= freeUp && (Part2Size == 0 || d.size < Part2Size) {
+		Part2Size = d.size
 	}
 
 	// Check all subdirectories
@@ -115,6 +120,11 @@ func part2(d *Directory, freeUp int) {
 // Get size of a directory, including subdirs
 func (d *Directory) totSize() int {
 
+	// Return size if already calculated (memoization)
+	if d.size > 0 {
+		return d.size
+	}
+
 	// Sum up files in this directory
 	tot := 0
 	for _, f := range d.files {
@@ -122,8 +132,8 @@ func (d *Directory) totSize() int {
 	}
 
 	// Sum up subdirectories
-	for _, subdir := range d.subdirs {
-		tot += subdir.totSize()
+	for i := 0; i < len(d.subdirs); i++ {
+		tot += d.subdirs[i].totSize()
 	}
 
 	// For part 1, add up sizes <= 100k
@@ -132,6 +142,7 @@ func (d *Directory) totSize() int {
 	}
 
 	// Return size of this directory, including its subdirs
+	d.size = tot // remember size, so don't have to recalculate (memoization)
 	return tot
 }
 
