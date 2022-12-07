@@ -2,23 +2,20 @@
 //
 // Description:
 //
-// AK, 1 Dec 2022
+// AK, X Dec 2022
 
 package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"strings"
+	//"strings"
 )
 
 func main() {
 
 	// Read the input file
-	filename := "sample.txt"
-	//filename := "input.txt"
-	data, _ := ioutil.ReadFile(filename)
-	lines := strings.Split(string(data), "\n")
+	lines := readLines("sample.txt")
+	// lines := readFile("input.txt")
 	fmt.Println(len(lines), "lines read")
 
 	// Process each line

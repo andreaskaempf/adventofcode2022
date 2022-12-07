@@ -9,13 +9,24 @@ import (
 	"strings"
 )
 
-// Read lines from the input file
+// Read lines from the input file, remove any blank lines at end
 func readLines(filename string) []string {
+
+	// Read data
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
-	return strings.Split(string(data), "\n")
+
+	// Split into lines
+	lines := strings.Split(string(data), "\n")
+
+	// Remove any blank lines
+	for len(lines) > 0 && len(lines[len(lines)-1]) == 0 {
+		lines = lines[:len(lines)-1]
+	}
+
+	return lines
 }
 
 // Parse an integer, show message and return -1 if error
@@ -70,7 +81,7 @@ func sum[T int | float64](l []T) T {
 }
 
 // Intersection of two lists
-func intersection[T int | int64 | float64 | byte | string](a, b []T) []T {
+func intersection[T int | float64 | byte | string](a, b []T) []T {
 	res := []T{}
 	for i := 0; i < len(a); i++ {
 		if in(a[i], b) {
@@ -81,7 +92,7 @@ func intersection[T int | int64 | float64 | byte | string](a, b []T) []T {
 }
 
 // Union of two lists
-func union[T int | int64 | float64 | byte | string](a, b []T) []T {
+func union[T int | float64 | byte | string](a, b []T) []T {
 	res := []T{}
 	copy(res, a) // warning: this will include duplicates in list a
 	for i := 0; i < len(b); i++ {
@@ -93,11 +104,25 @@ func union[T int | int64 | float64 | byte | string](a, b []T) []T {
 }
 
 // Is element in a list?
-func in[T int | int64 | float64 | byte | string](c T, s []T) bool {
+func in[T int | float64 | byte | string](c T, s []T) bool {
 	for i := 0; i < len(s); i++ {
 		if s[i] == c {
 			return true
 		}
 	}
 	return false
+}
+
+// Shallow compare two lists element-by-element, and report
+// if they are the same
+func same[T comparable](a, b []T) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := 0; i < len(a); i++ {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
 }
