@@ -14,8 +14,8 @@ import (
 func main() {
 
 	// Read the input file
-	lines := readLines("sample.txt")
-	//lines := readLines("input.txt")
+	//lines := readLines("sample.txt")
+	lines := readLines("input.txt")
 	fmt.Println(len(lines), "lines read")
 
 	// Part 1: count how many trees are "visible"
@@ -32,7 +32,7 @@ func main() {
 	fmt.Println("Part 1 (s/b 21):", nvis)
 
 	// Part 2: maximum scenic score
-	// 560 too low
+	// 560 too low, also 14400
 	score := 0
 	for r := 0; r < nr; r++ {
 		for c := 0; c < nc; c++ {
@@ -138,13 +138,23 @@ func scenicScore(r, c int, forest []string) int {
 
 // Count the number of trees visible in this sequence,
 // i.e., each >= to the last
+// TODO: can you see trees that are higher, but a few beyond the last one?
 func nVisible(trees []byte) int {
 	n := 0
+	if len(trees) < 2 {
+		return 0
+	}
+	highest := trees[1]
 	for i := 1; i < len(trees); i++ {
-		if i == 1 || trees[i] >= trees[i-1] {
+		if trees[i] > trees[0] {
 			n++
-		} else {
 			break
+		}
+		if i == 1 || trees[i] >= highest {
+			n++
+		}
+		if trees[i] > highest {
+			highest = trees[i]
 		}
 	}
 	return n
