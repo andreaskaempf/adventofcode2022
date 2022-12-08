@@ -27,6 +27,11 @@ see https://adventofcode.com/2022
   and the size of the smallest directory that would free 
   up a required amount of space. (*medium*)
 
+* **Day 8** (Go): Given a topographical map (matrix) of tree heights, count 
+  the number of trees that have visibility all the way to the edge (Part 1), 
+  and the highest "visibility" score of any tree, where that score is the product
+  of the numbers of trees less than the current tree in each direction. (*medium*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go

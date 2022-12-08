@@ -1,6 +1,9 @@
 // Advent of Code 2022, Day 08
 //
-// Description:
+// Given a topographical map (matrix) of tree heights, count the number of
+// trees that have visibility all the way to the edge (Part 1), and the
+// highest "visibility" score of any tree, where that score is the product
+// of the numbers of trees less than the current tree in each direction.
 //
 // AK, 8 Dec 2022
 
@@ -8,7 +11,6 @@ package main
 
 import (
 	"fmt"
-	//"strings"
 )
 
 func main() {
@@ -19,6 +21,15 @@ func main() {
 	fmt.Println(len(lines), "lines read")
 
 	// Part 1: count how many trees are "visible"
+	fmt.Println("Part 1 (s/b 21 or 1763):", part1(lines))
+
+	// Part 2: maximum scenic score
+	// 560 and 14400 both too low
+	fmt.Println("Part 2 (s/b 8 or 671160):", part2(lines))
+}
+
+// Part 1: how many trees are visible?
+func part1(lines []string) int {
 	nr := len(lines)
 	nc := len(lines[0])
 	nvis := 0
@@ -29,26 +40,10 @@ func main() {
 			}
 		}
 	}
-	fmt.Println("Part 1 (s/b 21):", nvis)
-
-	// Part 2: maximum scenic score
-	// 560 too low, also 14400
-	score := 0
-	for r := 0; r < nr; r++ {
-		for c := 0; c < nc; c++ {
-			ss := scenicScore(r, c, lines)
-			if ss > score {
-				//fmt.Printf("Max %d found at %d,%d\n", ss, r, c)
-				score = ss
-			}
-		}
-	}
-	fmt.Println("Part 2 (s/b 8):", score)
-	fmt.Println("Score 1,2 =", scenicScore(1, 2, lines), " (s/b 4)")
-	fmt.Println("Score 3,2 =", scenicScore(3, 2, lines), " (s/b 8)")
+	return nvis
 }
 
-// For Part 1: Is tree in the given position "visible"
+// For Part 1, is tree in the given position "visible" from any direction?
 func isVisible(r, c int, forest []string) bool {
 
 	// Trees on the edges are always visible
@@ -91,19 +86,38 @@ func isVisible(r, c int, forest []string) bool {
 		}
 	}
 
-	// A tree is visible if not blocked from any direction
+	// A tree is visible if not blocked from all directions
 	return visLeft || visRight || visAbove || visBelow
 }
 
-// For Part 1: Is tree in the given position "visible"
+// Part 2: maximum "score" of tree visibility
+func part2(lines []string) int {
+	score := 0
+	nr := len(lines)
+	nc := len(lines[0])
+	for r := 0; r < nr; r++ {
+		for c := 0; c < nc; c++ {
+			ss := scenicScore(r, c, lines)
+			if ss > score {
+				score = ss
+			}
+		}
+	}
+	return score
+}
+
+// For Part 1, is tree in the given position "visible"
 func scenicScore(r, c int, forest []string) int {
 
-	// Count how many trees are visible in each direction
+	// If on the edge, score is zero
+	if r == 0 || r == nr-1 || c == 0 || c == nc-1 {
+		return 0
+	}
+
+	// Count how many trees are visible in each direction, by extracting the
+	// trees from the current tree in each direction, then checking that sequence
 	nr := len(forest)
 	nc := len(forest[0])
-	/*if r == 0 || r == nr-1 || c == 0 || c == nc-1 {
-		return 0
-	}*/
 
 	seq := []byte{}
 	for i := c; i >= 0; i-- { // left
@@ -130,31 +144,17 @@ func scenicScore(r, c int, forest []string) int {
 	visDown := nVisible(seq)
 
 	// Return product to get score
-	score := visLeft * visRight * visUp * visDown
-	fmt.Printf("%d,%d: left = %d, right = %d, up = %d, down = %d => %d\n",
-		r, c, visLeft, visRight, visUp, visDown, score)
-	return score
+	return visLeft * visRight * visUp * visDown
 }
 
-// Count the number of trees visible in this sequence,
-// i.e., each >= to the last
-// TODO: can you see trees that are higher, but a few beyond the last one?
+// Count the number of trees visible from the first tree in given sequence,
+// i.e., not higher than the starting tree
 func nVisible(trees []byte) int {
 	n := 0
-	if len(trees) < 2 {
-		return 0
-	}
-	highest := trees[1]
 	for i := 1; i < len(trees); i++ {
-		if trees[i] > trees[0] {
-			n++
+		n++
+		if trees[i] >= trees[0] {
 			break
-		}
-		if i == 1 || trees[i] >= highest {
-			n++
-		}
-		if trees[i] > highest {
-			highest = trees[i]
 		}
 	}
 	return n
