@@ -14,8 +14,8 @@ import (
 func main() {
 
 	// Read the input file
-	//lines := readLines("sample.txt")
-	lines := readLines("input.txt")
+	lines := readLines("sample.txt")
+	//lines := readLines("input.txt")
 	fmt.Println(len(lines), "lines read")
 
 	// Part 1: count how many trees are "visible"
@@ -38,14 +38,14 @@ func main() {
 		for c := 0; c < nc; c++ {
 			ss := scenicScore(r, c, lines)
 			if ss > score {
-				fmt.Printf("Max %d found at %d,%d\n", ss, r, c)
+				//fmt.Printf("Max %d found at %d,%d\n", ss, r, c)
 				score = ss
 			}
 		}
 	}
 	fmt.Println("Part 2 (s/b 8):", score)
-	//fmt.Println("Score 1,2 =", scenicScore(1, 2, lines), " (s/b 4)")
-	//fmt.Println("Score 3,2 =", scenicScore(3, 2, lines), " (s/b 8)")
+	fmt.Println("Score 1,2 =", scenicScore(1, 2, lines), " (s/b 4)")
+	fmt.Println("Score 3,2 =", scenicScore(3, 2, lines), " (s/b 8)")
 }
 
 // For Part 1: Is tree in the given position "visible"
@@ -57,8 +57,6 @@ func isVisible(r, c int, forest []string) bool {
 	if r == 0 || r == nr-1 || c == 0 || c == nc-1 {
 		return true
 	}
-
-	// A tree is blocked if there is another tree of equal height on either side
 
 	// Otherwise, look up & down left & right, to see
 	// if there is an "opening" in any direction, i.e.,
@@ -132,10 +130,10 @@ func scenicScore(r, c int, forest []string) int {
 	visDown := nVisible(seq)
 
 	// Return product to get score
-	//fmt.Printf("left = %d, right = %d, up = %d, down = %d\n",
-	//	visLeft, visRight, visAbove, visBelow)
-	//fmt.Println("S/b 1, 2, 1, 2")
-	return visLeft * visRight * visUp * visDown
+	score := visLeft * visRight * visUp * visDown
+	fmt.Printf("%d,%d: left = %d, right = %d, up = %d, down = %d => %d\n",
+		r, c, visLeft, visRight, visUp, visDown, score)
+	return score
 }
 
 // Count the number of trees visible in this sequence,
@@ -143,10 +141,6 @@ func scenicScore(r, c int, forest []string) int {
 func nVisible(trees []byte) int {
 	n := 0
 	for i := 1; i < len(trees); i++ {
-		if trees[i] > trees[0] {
-			n++
-			break
-		}
 		if i == 1 || trees[i] >= trees[i-1] {
 			n++
 		} else {
