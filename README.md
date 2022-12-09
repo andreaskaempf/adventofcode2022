@@ -29,8 +29,14 @@ see https://adventofcode.com/2022
 
 * **Day 8** (Go): Given a topographical map (matrix) of tree heights, count 
   the number of trees that have visibility all the way to the edge (Part 1), 
-  and the highest "visibility" score of any tree, where that score is the product
-  of the numbers of trees less than the current tree in each direction. (*medium*)
+  and the highest "visibility" score of any tree, where that score is the 
+  product of the numbers of trees less than the current tree in each 
+  direction. (*medium*)
+
+* **Day 9** (Go): Simulate movement of "knots" along a rope, in response to 
+  the first knot being moved. For part 1, there are only two knots (head and 
+  tail), for part 2 there are 10. After the simulation, report the number 
+  of positions the tail has covered. (*easy*)
 
 To compile and run a **Go** program
 * Change into the directory with the program

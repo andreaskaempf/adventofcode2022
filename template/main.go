@@ -15,7 +15,7 @@ func main() {
 
 	// Read the input file
 	lines := readLines("sample.txt")
-	// lines := readFile("input.txt")
+	// lines := readLines("input.txt")
 	fmt.Println(len(lines), "lines read")
 
 	// Process each line
