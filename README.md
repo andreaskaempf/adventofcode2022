@@ -38,6 +38,12 @@ see https://adventofcode.com/2022
   tail), for part 2 there are 10. After the simulation, report the number 
   of positions the tail has covered. (*easy*)
 
+* **Day 10** (Go): Simulate accumulator register during a series of given 
+  ADD or NOOP instructions, and report the accumulator values during 
+  selected clock cycles (Part 1). For part 2, simulate drawing of pixels 
+  on a screen, using the sequence of acculator values, and report the eight 
+  letters that appear. (*medium*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
