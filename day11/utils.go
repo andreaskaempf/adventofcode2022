@@ -154,3 +154,9 @@ func ifElse[T int | float64 | byte | string](cond bool, a, b T) T {
 		return b
 	}
 }
+
+func assert(cond bool, msg string) {
+	if !cond {
+		panic(msg)
+	}
+}

@@ -44,6 +44,17 @@ see https://adventofcode.com/2022
   on a screen, using the sequence of acculator values, and report the eight 
   letters that appear. (*medium*)
 
+* **Day 11** (Go): Simulate transfer of objects between a bunch of monkeys, 
+  with "worry levels" assigned to each object. Each monkey modifies the 
+  worry level according to some rules, then passes it to one of two monkeys, 
+  depending on whether the worry level is divisible by that monkey's "test" 
+  number.  Count up the number of inspections each monkey makes during the 
+  simulation. The answer is the product of the two highest inspection counts. 
+  Trivial (if tedious) for 20 iterations in Part 1, but integer values 
+  overflow for 10,000 iterations in Part 2, unless you apply an adjustment 
+  that preserves the decision outcomes while keeping the numbers fom getting 
+  too large. (*hard*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go

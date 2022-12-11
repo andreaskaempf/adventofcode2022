@@ -39,6 +39,16 @@ func atoi(s string) int {
 	return int(n)
 }
 
+// Parse a 64-bit integer, show message and return -1 if error
+func atoi64(s string) int64 {
+	n, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		fmt.Println("Could not parse integer:", s)
+		n = -1
+	}
+	return n
+}
+
 // Parse a float, show message and return -1 if error
 func atof(s string) float64 {
 	n, err := strconv.ParseFloat(s, 64)
@@ -142,5 +152,11 @@ func ifElse[T int | float64 | byte | string](cond bool, a, b T) T {
 		return a
 	} else {
 		return b
+	}
+}
+
+func assert(cond bool, msg string) {
+	if !cond {
+		panic(msg)
 	}
 }
