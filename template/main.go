@@ -1,8 +1,8 @@
-// Advent of Code 2022, Day 0X
+// Advent of Code 2022, Day 1X
 //
 // Description:
 //
-// AK, X Dec 2022
+// AK, 1X Dec 2022
 
 package main
 

@@ -55,6 +55,11 @@ see https://adventofcode.com/2022
   that preserves the decision outcomes while keeping the numbers fom getting 
   too large. (*hard*)
 
+* **Day 12** (Go): Find the lowest cost path (i.e., shortest number of steps)
+  through a terrain of letters, from point S to E, allowing 'increase' (e.g.,
+  next letter) of maximum 1. For Part 2, find the shortest path from any 'a'
+  cell to 'E'. (*medium*, using yourbasic/graph library)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
