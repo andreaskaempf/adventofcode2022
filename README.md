@@ -60,6 +60,13 @@ see https://adventofcode.com/2022
   next letter) of maximum 1. For Part 2, find the shortest path from any 'a'
   cell to 'E'. (*medium*, using yourbasic/graph library)
 
+* **Day 13** (Python): Given pairs of nested lists of numbers, count up how
+  many are in the right order according to an arcane comparison function (Part
+  1), then combine all the pair elements into one big list, add a couple of 
+  marker elements, and sort the list according to the comparison function. 
+  For Part 2, report the product of the indices of the two marker elements.
+  (*medium*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
