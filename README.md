@@ -67,6 +67,12 @@ see https://adventofcode.com/2022
   For Part 2, report the product of the indices of the two marker elements.
   (*medium*)
 
+* **Day 14** (Go): Simulate grains of sand dropping from a hole into 2-d space.
+  For Part 1, count how many grains of sand before they start dropping of edges
+  of existing rock. For Part 2, add a "foor" below  bottom layer of rock, and
+  count how many grains of sand before a pyramid is built, and the hole at the
+  top becomes blocked. (*medium*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
