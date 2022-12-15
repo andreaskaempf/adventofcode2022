@@ -16,5 +16,6 @@ fi
 mkdir $1
 cd $1
 cp ../template/* .
+rm -vi main_test.go
 go mod init $1
 
