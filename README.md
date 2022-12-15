@@ -73,6 +73,11 @@ see https://adventofcode.com/2022
   count how many grains of sand before a pyramid is built, and the hole at the
   top becomes blocked. (*medium*)
 
+* **Day 15** (Go): Given a list of "sensors" and their distance to nearest
+  "beacon", find positions in a row that could not possibly have a beacon (Part
+  1), and the possible location of an undetected beacon (i.e., where there is
+  in coverage by known beacons) for Part 2. (*hard*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
