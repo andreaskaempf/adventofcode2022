@@ -78,6 +78,13 @@ see https://adventofcode.com/2022
   1), and the possible location of an undetected beacon (i.e., where there is
   in coverage by known beacons) for Part 2. (*hard*)
 
+* **Day 16** (Go): Given a network (graph) of closed "valves", each with
+  a certain flow rate, find the sequence of opening the valves (takes 
+  one minute, plus one minute per step to get there) that yields the
+  highest possible total flow during a 30-minute period. Used brute force
+  for Part 1, but need to revisit this to formulate a true optimization
+  and complete Part 2. (*very hard* and **incomplete**)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go

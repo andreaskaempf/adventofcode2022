@@ -44,16 +44,16 @@ func main() {
 
 	// Read the input file, parse into list of sensors
 	fname := "sample.txt"
-	//fname = "input.txt" // uncomment to use input
+	fname = "input.txt" // uncomment to use input
 	readData(fname)
 
 	// Part 1: use 10 for sample, 2000000 for input
-	part1(10)
-	//part1(2000000)
+	//part1(10)
+	part1(2000000)
 
 	// Part 2: use 20 for sample, 4000000 for input
-	part2(20)
-	//part2(4000000)
+	//part2(20)
+	part2(4000000)
 }
 
 // Part 1: count the positions where a beacon cannot possibly be along
