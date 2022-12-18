@@ -85,12 +85,12 @@ see https://adventofcode.com/2022
   for Part 1, but need to revisit this to formulate a true optimization
   and complete Part 2. (*very hard* and **incomplete**)
 
-* **Day 17** (Go): Simulate simple geometric shapes falling down a shaft,
+* **Day 17** (Go + Python): Simulate simple geometric shapes falling down a shaft,
   getting moved left and right by gusts of "gas", and falling on top of 
-  each other. For part 1, determine the total height of the shapes after
+  each other. For Part 1, determine the total height of the shapes after
   2022 have fallen. For Part 2, do the same for 1 000 000 000 000 shapes
-  (infeasible to simulate, need to find a better way, perhaps by finding
-  when the pattern starts to repeat, *hard* and **incomplete**)
+  (infeasible to simulate, so looked for repeating pattern in height
+  deltas, and applied simple math in separate Python script, *hard*)
 
 * **Day 18** (Go): Given a list of 1x1x1 cubes in 3-d space, count up surfaces
   that don't touch another point (Part 1).  For Part 2, only count surfaces
