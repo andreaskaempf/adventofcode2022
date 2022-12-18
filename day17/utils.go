@@ -82,7 +82,7 @@ func min[T int | float64 | string](l []T) T {
 }
 
 // Sum of a list
-func sum[T int | float64](l []T) T {
+func sum[T int | int64 | float64](l []T) T {
 	var y T
 	for i := 0; i < len(l); i++ {
 		y += l[i]

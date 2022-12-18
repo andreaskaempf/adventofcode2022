@@ -373,6 +373,7 @@ In the example above, the tower would be 1514285714288 units tall!
 
 How tall will the tower be after 1000000000000 rocks have stopped?
 
-Answer: 
- 
+Your puzzle answer was 1540804597682.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
 
