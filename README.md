@@ -92,6 +92,11 @@ see https://adventofcode.com/2022
   (infeasible to simulate, need to find a better way, perhaps by finding
   when the pattern starts to repeat, *hard* and **incomplete**)
 
+* **Day 18** (Go): Given a list of 1x1x1 cubes in 3-d space, count up surfaces
+  that don't touch another point (Part 1).  For Part 2, only count surfaces
+  that are outside the shape (may include some face inside of a "tunnel", so
+  can't just look outward from surface). (*medium*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go

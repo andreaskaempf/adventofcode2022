@@ -28,7 +28,7 @@ func main() {
 
 	// Read the input file, just one line!
 	fname := "sample.txt"
-	fname = "input.txt"
+	//fname = "input.txt"
 	data, _ := ioutil.ReadFile(fname)
 	patt := string(data) // remove trailing newlines with editor
 	fmt.Println("Pattern length is", len(patt))
@@ -50,16 +50,18 @@ func main() {
 	var height int64 = 0       // current height of the hightest rock
 	pi := 0                    // start in position 0 of pattern
 	var rocks int64 = 2022     // 2022 for part 1
-	rocks = 1000000000000      // uncomment for part 2
+	//rocks = 1000000000000      // uncomment for part 2
+	rocks = 1000000 // uncomment for part 2
 	var rock int64
 	for rock = 0; rock < rocks; rock++ { // number of rocks
 
 		// Show progress
-		if rock%1000000 == 0 {
+		if rock%1000 == 0 {
 			secs := float64(time.Now().Unix() - t0)
 			frac := float64(rock) / float64(rocks)
 			totHrs := (secs / frac) / (60 * 60)
 			fmt.Printf("%.4f%% done, %.1f hours to go, height = %d\n", frac*100.0, totHrs, height)
+			repeating()
 		}
 
 		// Get the shape of this rock
@@ -189,13 +191,12 @@ func repeating() {
 	fmt.Println("Row 1:", row1)
 	var y int64
 	for y = 2; y <= maxY; y++ {
-		if same(row(y), row1) {
-			//fmt.Println("Row", y, "matches row 1")
-			if same(row(y+1), row(2)) {
-				fmt.Println("Next row matches as well!")
-			}
+		if same(row(y), row1) && same(row(y+1), row(2)) {
+			fmt.Println("Row", y, "matches next 2 rows")
+			return
 		}
 	}
+	fmt.Println("No matches found")
 }
 
 func row(y int64) []int {
