@@ -97,6 +97,18 @@ see https://adventofcode.com/2022
   that are outside the shape (may include some face inside of a "tunnel", so
   can't just look outward from surface). (*medium*)
 
+* **Day 19**: *Not done yet*
+
+* **Day 20** (Go): Given a list of numbers (7 in sample, but 5000 in input),
+  simulate moving each number forward or backward in the (circular) list,
+  forward if positive or backward if negative. For Part 1, do this once, and
+  report the sum of the values 1000, 2000, and 3000 after zero. For Part 2,
+  multiply each number by a huge value, and do it 10 times, report same sum.
+  Complicated by duplicate values in the  main input, so you can't just look
+  for position of a value. Also, iterations in Part 2 are infeasible with large
+  multiplier as well as 10 iterations (*hard*).
+
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
