@@ -67,7 +67,8 @@ func main() {
 	// Brute force: works fine and quicly on the problem sample
 	// (720 permutations), but takes about 20 hours on the full
 	// problem input
-	tryAll()
+	//tryAll()
+	korylprince()
 }
 
 // Shortest distance between two nodes, with memoization

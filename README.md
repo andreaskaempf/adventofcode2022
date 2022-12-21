@@ -108,6 +108,10 @@ see https://adventofcode.com/2022
   for position of a value. Also, iterations in Part 2 are infeasible with large
   multiplier as well as 10 iterations (*hard*).
 
+* **Day 21** (Go): Given a list of variable names, each with either a numbers
+  or a simple formula, recursively evaluate the root node (Part 1),
+  and find the value for one cell that makes the two sides of the
+  root node equal (*medium*).
 
 To compile and run a **Go** program
 * Change into the directory with the program
