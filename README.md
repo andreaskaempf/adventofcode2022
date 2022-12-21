@@ -111,7 +111,7 @@ see https://adventofcode.com/2022
 * **Day 21** (Go): Given a list of variable names, each with either a numbers
   or a simple formula, recursively evaluate the root node (Part 1),
   and find the value for one cell that makes the two sides of the
-  root node equal (*medium*).
+  root node equal (solved using gradient descent, *medium*).
 
 To compile and run a **Go** program
 * Change into the directory with the program
