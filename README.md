@@ -97,7 +97,13 @@ see https://adventofcode.com/2022
   that are outside the shape (may include some face inside of a "tunnel", so
   can't just look outward from surface). (*medium*)
 
-* **Day 19**: *Not done yet*
+* **Day 19** (Go): Basically a set of optimizations, to find the maximum number 
+  of "geodes" that can be produced over 24 periods from a set of four types of
+  "robots".  Each robot can produce one mineral of its own kind each time
+  period. There are 30 "blueprints" (cost schedules), each of which lists the
+  number of each type of ingredient required to build a robot. So it's a
+  production plan optimization.  Part 1 asks you to optimize all 30 schedules,
+  Part 2 only the first 3 blueprints, but for 32 periods instead of 24 (*hard*).
 
 * **Day 20** (Go): Given a list of numbers (7 in sample, but 5000 in input),
   simulate moving each number forward or backward in the (circular) list,
