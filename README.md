@@ -113,6 +113,12 @@ see https://adventofcode.com/2022
   and find the value for one cell that makes the two sides of the
   root node equal (solved using gradient descent, *medium*).
 
+* **Day 22** (Go): Simulate movement on a 2D map, according to a list of
+  instructions, which can either be to move n steps, or to turn 90 degrees 
+  left or right. There are obstacles to avoid, and one wraps around to the 
+  other side when walking off and edge. For Part 1, the map is in 2D. For 
+  Part 3, the map gets folded into a cube (*hard* and **incomplete**).
+
 * **Day 23** (Go): Simulate movement of "elves" on a map, with proposed moves
   rejected if they clash with any of the other "elves". For Part 1, report the 
   number of free spaces in the rectangle that encloses all the elves at the end 
