@@ -113,6 +113,12 @@ see https://adventofcode.com/2022
   and find the value for one cell that makes the two sides of the
   root node equal (solved using gradient descent, *medium*).
 
+* **Day 23** (Go): Simulate movement of "elves" on a map, with proposed moves
+  rejected if they clash with any of the other "elves". For Part 1, report the 
+  number of free spaces in the rectangle that encloses all the elves at the end 
+  of round 10.  For Part 2, report the first round in which there is no more 
+  movement. (*medium*)
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go

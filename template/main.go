@@ -1,8 +1,8 @@
-// Advent of Code 2022, Day 1X
+// Advent of Code 2022, Day 2X
 //
 // Description:
 //
-// AK, 1X Dec 2022
+// AK, 2X Dec 2022
 
 package main
 
@@ -14,12 +14,9 @@ import (
 func main() {
 
 	// Read the input file
-	lines := readLines("sample.txt")
-	// lines := readLines("input.txt")
-	fmt.Println(len(lines), "lines read")
-
-	// Process each line
-	for _, l := range lines {
-		fmt.Println(l) // TODO
+	fname := "sample.txt"
+	//fname = "input.txt"
+	for _, l := range readLines(fname) {
+		fmt.Println(l)
 	}
 }
