@@ -131,6 +131,12 @@ see https://adventofcode.com/2022
   of round 10.  For Part 2, report the first round in which there is no more 
   movement. (*medium*)
 
+* **Day 24** (Go): Find shortest path from entry to exit of a rectangular field, 
+  avoiding "blizzards" that move every time step. For Part 2, also move back to
+  entry then back to exit, and add up all the steps. Used dynamic programming, 
+  depth-first search with memoization of previously found best values for each 
+  position+time combination (*medium*).
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
