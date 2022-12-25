@@ -137,6 +137,11 @@ see https://adventofcode.com/2022
   depth-first search with memoization of previously found best values for each 
   position+time combination (*medium*).
 
+* **Day 25** (Go): Decode a series of numbers which are in base 5 with some 
+  special characters representing negative numbers. Then, add up the decimal
+  equivalents, and return the result encoded back into the special 
+  representation (*hard*).
+
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
