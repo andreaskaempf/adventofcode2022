@@ -147,7 +147,7 @@ func abs[T int | int64 | float64](x T) T {
 }
 
 // Simple inline if-then-else
-func ifElse[T int | float64 | byte | string](cond bool, a, b T) T {
+func ifElse[T int | float64 | byte | string | rune](cond bool, a, b T) T {
 	if cond {
 		return a
 	} else {

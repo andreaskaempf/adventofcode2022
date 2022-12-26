@@ -194,25 +194,3 @@ func free(x, y int) bool {
 	}
 	return true
 }
-
-// Any overlaps, i.e., more than one elf in same position (for debugging)
-func _overlaps() {
-	points := map[Point]int{}
-	for _, e := range elves {
-		points[e.now]++
-		if points[e.now] > 1 {
-			fmt.Println("*** Overlap", points[e.now], "found at", e.now)
-		}
-	}
-}
-
-// Draw map (for debugging)
-func _draw() {
-	min, max := minMax()
-	for y := min.y; y <= max.y; y++ {
-		for x := min.x; x <= max.x; x++ {
-			fmt.Print(ifElse(free(x, y), ".", "#"))
-		}
-		fmt.Println()
-	}
-}

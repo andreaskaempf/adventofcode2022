@@ -127,7 +127,7 @@ see https://adventofcode.com/2022
   instructions, which can either be to move n steps, or to turn 90 degrees 
   left or right. There are obstacles to avoid, and one wraps around to the 
   other side when walking off and edge. For Part 1, the map is in 2D. For 
-  Part 3, the map gets folded into a cube (*hard* and **incomplete**).
+  Part 3, the map gets folded into a cube (*hard*).
 
 * **Day 23** (Go): Simulate movement of "elves" on a map, with proposed moves
   rejected if they clash with any of the other "elves". For Part 1, report the 
@@ -143,17 +143,14 @@ see https://adventofcode.com/2022
 
 * **Day 25** (Go): Decode a series of numbers which are in base 5 with some 
   special characters representing negative numbers. Then, add up the decimal
-  equivalents, and return the result encoded back into the special 
-  representation (*hard*).
+  equivalents, and return the result encoded back into the special
+  representation (*hard*). Part 2 was granted for free after after completing
+  the other days.
 
 To compile and run a **Go** program
 * Change into the directory with the program
 * go build day01.go
 * ./day01
-
-To run a **Julia** program
-* Change into the directory with the program
-* julia day02.jl
 
 To run a **Python** program
 * Change into the directory with the program

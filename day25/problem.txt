@@ -160,3 +160,9 @@ Only 49 stars to go.
 
 You don't have enough stars to fill the blender, though. You need 2 more.
 
+--- Part Two ---
+
+Both parts of this puzzle are complete! They provide two gold stars: **
+
+At this point, all that is left is for you to admire your Advent calendar.
+

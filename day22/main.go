@@ -6,13 +6,12 @@
 // off and edge. For Part 1, the map is in 2D. For Part 3, the map gets folded
 // into a cube.
 //
-// AK, 22 Dec 2022
+// AK, 22 and 26 Dec 2022
 
 package main
 
 import (
 	"fmt"
-	//"strings"
 )
 
 type Point struct {
@@ -42,42 +41,7 @@ func main() {
 	part1()
 
 	// Do part 2
-	part2()
-}
-
-// Part 2: same as part 1, but wrap around cube instead of 2-d space
-func part2() {
-
-	// Start in the first open tile on the first row, facing right
-	y := 1
-	x := minX[1]
-	assert(tiles[Point{x, y}] == '.', "First tile is not open!")
-	dir := 90 // start facing right
-
-	// Process instructions, simplify by adding up all moves in each direction?
-	for _, inst := range instructions {
-
-		if inst == RIGHT { // Rotate right
-			dir = ifElse(dir == 270, 0, dir+90)
-		} else if inst == LEFT { // Rotate left
-			dir = ifElse(dir == 0, 270, dir-90)
-		} else if dir == 90 { // Move right
-			x1 := x
-			y1 := y
-			for k := 0; k < inst; k++ {
-				x1++
-				if tiles[Point{x1, y1}] == 0 { // no tile, wrap to beginning
-					x1 = minX[y1]
-				}
-				if tiles[Point{x1, y1}] == '.' {
-					x = x1
-				} else {
-					break
-				}
-			}
-		}
-	}
-
+	part2() // only works for input, not sample
 }
 
 // Part 1: follow instructions, moving around 2-d space, wrapping as necessary
@@ -92,9 +56,7 @@ func part1() {
 	// Process instructions, simplify by adding up all moves in each direction?
 	for i := 0; i < len(instructions); i++ {
 
-		// Process a turn
-
-		// TODO: STOP IF YOU HIT A WALL, EVEN IN MID INSTRUCTION
+		// Process each turn or movement
 		inst := instructions[i]
 		if inst == RIGHT { // Rotate right
 			dir = ifElse(dir == 270, 0, dir+90)
@@ -169,6 +131,301 @@ func part1() {
 	fmt.Println("Part 1: score (s/b 6032, 36518) =", score)
 }
 
+// Part 2: same as part 1, but wrap around cube instead of 2-d space.
+// Done for main input only, and cube layout is hard-coded (so will not work
+// for other layouts). Each face of the cube is assigned a letter:
+//        _____ _____
+//       |     |     |
+//       |  A  |  B  |
+//       |_____|_____|
+//       |     |
+//       |  C  |
+//  _____|_____|
+// |     |     |
+// |  D  |  E  |
+// |_____|_____|
+// |     |
+// |  F  |
+// |_____|
+//
+
+func part2() {
+
+	// Start in the first open tile on the first row (top left cell on face A),
+	// facing right
+	y := 1
+	x := minX[1]
+	assert(tiles[Point{x, y}] == '.', "First tile is not open!")
+	dir := 90 // start facing right
+
+	// Process instructions, simplify by adding up all moves in each direction?
+	for _, inst := range instructions {
+
+		// Get new coordinates and direction, and cell contents, if we did
+		// that move. Update coordinates and direction if we would be moving
+		// into an empty space (i.e., contains period).
+		if inst == RIGHT { // Rotate right
+			dir = ifElse(dir == 270, 0, dir+90)
+		} else if inst == LEFT { // Rotate left
+			dir = ifElse(dir == 0, 270, dir-90)
+		} else {
+			x1, y1, dir1, c := move(inst, x, y, dir)
+			assert(c == '.' || c == '#', "Invalid char in map")
+			if c == '.' {
+				x = x1
+				y = y1
+				dir = dir1
+			}
+		}
+	}
+
+	// Final score
+	facing := map[int]int{0: 3, 90: 0, 180: 1, 270: 2}
+	score := 1000*y + 4*x + facing[dir]
+	fmt.Println("Part 2 (s/b 144019):", score)
+}
+
+// Simulate a move for Part 2, given the number of steps to move in the
+// current direction, current x,y location on the current cube face (oriented
+// per original 2D layout), the current direction (relative to this cube face
+// in original orientation). Returns the new x,y coordinates (relative to the
+// original 2D layout), the direction (which may have changed as a result of
+// wrapping around the cube), and the contents of the new cell. Stops moving
+// before it hits a "wall" (cell with #).
+func move(n, x, y, dir int) (int, int, int, byte) {
+
+	// Initialize variables to relative coordinates on the current face
+	face := whichFace(x, y)   // which face we are on A-F
+	x1, y1 := relCoords(x, y) // coordinates relative to this face
+
+	// Do each step of the move
+	for k := 0; k < n; k++ {
+
+		// Remember position before move, in case we hit a wall
+		prevX := x1 // relative!
+		prevY := y1
+		prevDir := dir
+		prevFace := face
+
+		// Simulate one step in the current direction, on the current face
+		if dir == 90 { // right
+			x1++
+		} else if dir == 270 { // left
+			x1--
+		} else if dir == 0 { // up
+			y1--
+		} else if dir == 180 { // down
+			y1++
+		} else {
+			panic("Invalid direction!")
+		}
+
+		// If we are now off an edge of the face, we need to move to another face,
+		// adjusting x and y and possibly direction
+		if x1 < 1 { // moved off left edge
+
+			if face == 'A' { // now on D, upside down
+				face = 'D'
+				y1 = faceSize - y1
+				x1 = 1   // first column of D
+				dir = 90 // now moving right
+
+			} else if face == 'B' { // move B to A
+				face = 'A'
+				x1 = faceSize // y and dir do not change
+
+			} else if face == 'C' { // now on D, rotated 90 deg right
+				face = 'D'
+				x1 = y1
+				y1 = 1
+				dir = 180 // now moving down
+
+			} else if face == 'D' { // now on A, upside down
+				face = 'A'
+				x1 = 1
+				y1 = faceSize - y1
+				dir = 90 //  now moving right
+
+			} else if face == 'E' { // now on D, nothing to do
+				face = 'D'
+				x1 = faceSize
+
+			} else if face == 'F' { // now on A, rotated 90 degrees
+				face = 'A'
+				x1 = y1
+				y1 = 1
+				dir = 180 // now moving down
+			}
+
+		} else if x1 > faceSize { // moved off right edge
+
+			if face == 'A' {
+				face = 'B'
+				x1 = 1
+
+			} else if face == 'B' { // move B to E, upside down
+				face = 'E'
+				x1 = faceSize // right edge
+				y1 = faceSize - y1
+				dir = 270 // now moving left
+
+			} else if face == 'C' {
+				face = 'B'
+				x1 = y1
+				y1 = faceSize
+				dir = 0 // now moving up
+
+			} else if face == 'D' { // now on E continuing same direction
+				face = 'E'
+				x1 = 1
+
+			} else if face == 'E' { // E -> B, upside down
+				face = 'B'
+				x1 = faceSize
+				y1 = faceSize - y1
+				dir = 270 // moving left
+
+			} else if face == 'F' { // F -> E, rotated 90 degrees
+				face = 'E'
+				x1 = y1
+				y1 = faceSize
+				dir = 0 // now moving up
+			}
+
+		} else if y1 < 1 { // moved off top edge
+
+			if face == 'A' {
+				face = 'F'
+				y1 = x1
+				x1 = 1
+				dir = 90 // now moving right
+
+			} else if face == 'B' {
+				face = 'F'
+				y1 = faceSize
+				dir = 0 // still moving up
+
+			} else if face == 'C' {
+				face = 'A'
+				y1 = faceSize
+				dir = 0 // still moving up
+
+			} else if face == 'D' {
+				face = 'C'
+				y1 = x1
+				x1 = 1
+				dir = 90
+
+			} else if face == 'E' {
+				face = 'C'
+				y1 = faceSize
+				dir = 0 // still moving up
+
+			} else if face == 'F' {
+				face = 'D'
+				y1 = faceSize
+				dir = 0 // still moving up
+			}
+
+		} else if y1 > faceSize { // moved off bottom edge
+
+			if face == 'A' {
+				face = 'C'
+				y1 = 1
+				dir = 180 //still
+
+			} else if face == 'B' {
+				face = 'C'
+				y1 = x1
+				x1 = faceSize
+				dir = 270 // now moving left
+
+			} else if face == 'C' {
+				face = 'E'
+				y1 = 1
+				dir = 180 // still moving down
+
+			} else if face == 'D' {
+				face = 'F'
+				y1 = 1
+				dir = 180
+
+			} else if face == 'E' {
+				face = 'F'
+				y1 = x1
+				x1 = faceSize
+				dir = 270 // moving left
+
+			} else if face == 'F' {
+				face = 'B'
+				y1 = 1
+				dir = 180 // moving down
+			}
+		}
+
+		// Convert back to absolute coordinates, check if we have hit a wall,
+		// return last position if we have
+		ax, ay := absCoords(x1, y1, face)
+		if tiles[Point{ax, ay}] == '#' {
+			x1, y1 = absCoords(prevX, prevY, prevFace)
+			return x1, y1, prevDir, tiles[Point{x1, y1}]
+		}
+
+	}
+
+	// Convert back to absolute coordinates and return result
+	x1, y1 = absCoords(x1, y1, face)
+	return x1, y1, dir, tiles[Point{x1, y1}]
+}
+
+// For part 2
+const faceSize = 50 // width/height of each square face
+
+// Which face (A-F) is a given coordinate on
+func whichFace(x, y int) rune {
+	assert(tiles[Point{x, y}] != 0, "whichFace: point not on map!")
+	if y <= faceSize {
+		return ifElse(x > faceSize*2, 'B', 'A')
+	} else if y <= faceSize*2 {
+		return 'C'
+	} else if y <= faceSize*3 {
+		return ifElse(x > faceSize, 'E', 'D')
+	} else {
+		return 'F'
+	}
+}
+
+// Return the relative coordinates, i.e., 1..50, works for any face
+func relCoords(x, y int) (int, int) {
+	assert(tiles[Point{x, y}] != 0, "relCoords: point not on map!")
+	return x % faceSize, y % faceSize
+}
+
+// Return the absolute coordinates for a pair of 1..50 relative coordinates
+// and a face
+func absCoords(x, y int, face rune) (int, int) {
+
+	// Vertical adjustment
+	if face == 'C' {
+		y += faceSize
+	} else if face == 'D' || face == 'E' {
+		y += faceSize * 2
+	} else if face == 'F' {
+		y += faceSize * 3
+	}
+
+	// Horizontal adjustment
+	if face == 'A' || face == 'C' || face == 'E' {
+		x += faceSize
+	} else if face == 'B' {
+		x += faceSize * 2
+	}
+
+	// Return adjusted coordinates
+	assert(tiles[Point{x, y}] != 0, "absCoords: point not on map!")
+	return x, y
+}
+
 // Read the input file: map until blank line, then set of instructions,
 // also set min/max X/Y
 func readMap(fname string) {
@@ -179,7 +436,7 @@ func readMap(fname string) {
 	var x, y int
 	instructions = []int{}
 	for _, l := range readLines(fname) {
-		if len(l) == 0 {
+		if len(l) == 0 { // blank line means instructions come next
 			readingMap = false
 		} else if readingMap {
 			for x = 0; x < len(l); x++ {
@@ -188,7 +445,7 @@ func readMap(fname string) {
 				}
 			}
 			y++
-		} else {
+		} else { // instructions after blank line
 			instructions = parseInstructions(l)
 		}
 	}
@@ -214,16 +471,16 @@ func readMap(fname string) {
 	}
 }
 
-// Parse string of instructions: list of numbers,
-// where -1 means left and -2 means right
+// Parse string of instructions into a list of numbers, where -1 means turn
+// left and -2 means turn right, other numbers are the number of steps to move
 func parseInstructions(s string) []int {
 	result := []int{}
 	n := 0 // the current number
 	for i := 0; i < len(s); i++ {
 		c := s[i]
-		if c >= '0' && c <= '9' {
+		if c >= '0' && c <= '9' { // parse numbers, may be multi digit
 			n = n*10 + int(c-'0')
-		} else if c == 'L' || c == 'R' {
+		} else if c == 'L' || c == 'R' { // L and R are encoded as -1 and -2
 			if n > 0 {
 				result = append(result, n)
 				n = 0
