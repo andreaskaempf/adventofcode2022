@@ -2,3 +2,6 @@ graphs
 regex
 concurrency
 go.sum
+lp
+others
+*.png

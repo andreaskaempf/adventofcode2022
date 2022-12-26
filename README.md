@@ -78,12 +78,16 @@ see https://adventofcode.com/2022
   1), and the possible location of an undetected beacon (i.e., where there is
   in coverage by known beacons) for Part 2. (*hard*)
 
-* **Day 16** (Go): Given a network (graph) of closed "valves", each with
-  a certain flow rate, find the sequence of opening the valves (takes 
-  one minute, plus one minute per step to get there) that yields the
-  highest possible total flow during a 30-minute period. Used brute force
-  for Part 1, but need to revisit this to formulate a true optimization
-  and complete Part 2. (*very hard* and **incomplete**)
+* **Day 16** (Go): Given a network (graph) of closed "valves", each with 
+  a certain flow rate, connected by "tunnels", find the sequence of opening the
+  valves (takes one minute, plus one minute per step to get there) that yields
+  the highest possible total flow during a 30-minute period. For Part 2, same
+  but try two decisions (one for you and one for the "elephant") each time
+  step, over 26 minutes. Used simple depth-first dynamic programming solution,
+  recursively tries each feasible candidate unopened valve, excluding those for
+  which we wouldn't have enough time to get any flow. Same for Part 2, but
+  tried all possible pairs of remaining valves, one for each actor (slow but
+  works, *very hard*).
 
 * **Day 17** (Go + Python): Simulate simple geometric shapes falling down a shaft,
   getting moved left and right by gusts of "gas", and falling on top of 
