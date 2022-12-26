@@ -6,7 +6,7 @@
 // 30-minute period. Used brute force for Part 1, but need to revisit this to
 // formulate a true optimization and complete Part 2.
 //
-// AK, 16 Dec 2022
+// AK, 16 and 26 Dec 2022
 
 package main
 
@@ -49,7 +49,7 @@ func main() {
 
 	// Read the input file into a graph
 	fname := "sample.txt"
-	fname = "input.txt"
+	//fname = "input.txt"
 	readInput(fname)
 
 	// Try simulating some sample sequences
@@ -62,13 +62,77 @@ func main() {
 	// decent solution but not the optimum
 	// TODO: Get this working, by implementing some look-ahead, but
 	// not all permutations
-	//optimize()
+	fmt.Println("Part 1 (s/b 1651, 1647):", optimize3())
 
 	// Brute force: works fine and quicly on the problem sample
 	// (720 permutations), but takes about 20 hours on the full
 	// problem input
 	//tryAll()
-	korylprince()
+}
+
+func optimize3() int {
+
+	// Get list of (indices of) all valves that have flow, since these
+	// are the only ones we care about
+	valves := []int{}
+	for i := 0; i < len(nodes); i++ {
+		if nodes[i].flow > 0 {
+			valves = append(valves, i)
+			fmt.Printf("Valve %s: flow %d\n", nodes[i].id, nodes[i].flow)
+		}
+	}
+
+	// Optimize from starting node with all valves that have flow as
+	// candidates for the next move, and return the best result
+	return optimize3a(nodeAA, valves, 1)
+}
+
+// One recursive iteration of the optimization: given that you are
+// at node "here" at time "t", try to open valves in list "candidates"
+// and find the highest cumulative flow.
+func optimize3a(here int, candidates []int, t int) int {
+
+	// Out of time!
+	if t > 30 {
+		return 0
+	}
+
+	// Remove this node we're at from the list of possible
+	// candidates for future moves
+	candidates = remove(candidates, here) // makes a copy
+
+	// Try each candidate, pruning the ones that would take too
+	// long to reach, and re-using memoized solutions from previous
+	// iterations
+	best := 0
+	for _, vi := range candidates {
+
+		// Don't bother if not enough time to get there, i.e.,
+		// by the time you got there, you could not open the valve
+		// in time to get any flow
+		dist := shortest(here, vi) // time to get to the next valve
+		if (30-t)-dist < 1 {
+			continue
+		}
+
+		// Get the value of opening this candidate valve now, until the
+		// end of the simulation (takes one time step to open)
+		thisValveFlow := nodes[vi].flow * (30 - t - dist)
+		//fmt.Printf("Opening valve %s (flow %d) at t=%d, creates %d of flow\n",
+		//		nodes[vi].id, nodes[vi].flow, t, thisValveFlow)
+
+		// Simulate moving from this node to the alternative,
+		// and optimizing from there this node
+		newCand := remove(candidates, vi) // makes a copy
+		o := optimize3a(vi, newCand, t+dist+1)
+
+		// Is this the best found?
+		if thisValveFlow+o > best {
+			best = thisValveFlow + o
+		}
+	}
+
+	return best
 }
 
 // Shortest distance between two nodes, with memoization
@@ -129,4 +193,15 @@ func readInput(filename string) {
 			g.AddBothCost(ni, ci, 1) // add bidirectional connection, weight 1
 		}
 	}
+}
+
+// Remove element from a list, returning new copy
+func remove(elems []int, e int) []int {
+	res := []int{}
+	for _, x := range elems {
+		if x != e {
+			res = append(res, x)
+		}
+	}
+	return res
 }

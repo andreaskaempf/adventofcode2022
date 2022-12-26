@@ -45,7 +45,7 @@ func optimize2() {
 	}
 }
 
-func optimize() {
+func optimize_old() {
 
 	// Iterate until no open valves left
 	here := nodeAA             // index of the node we are at, start with AA
@@ -117,14 +117,6 @@ func optimize() {
 	// Show Part 1 answer
 	fmt.Println("Total flow (s/b 1651, 1647) =", totalFlow)
 	fmt.Println("Sequence (s/b DD, BB, JJ, EE, HH, CC):", seq)
-}
-
-func optimize1() {
-
-	// start at t = 1, at node 0, with all valves closed (0)
-	// pick each possible node, in flow order
-	// and try opening that
-
 }
 
 func optimize_(state []int, t int) { // state of each valve: 1 = open, 0 = closed
