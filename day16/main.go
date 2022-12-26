@@ -20,10 +20,8 @@ import (
 // A node in the graph
 type Node struct {
 	id     string
-	index  int // zero-based index
 	flow   int
 	connTo []string
-	opened bool
 }
 
 // Global list of nodes
@@ -52,25 +50,15 @@ func main() {
 	//fname = "input.txt"
 	readInput(fname)
 
-	// Try simulating some sample sequences
-	//sampleSeq := []int{3, 1, 9, 7, 4, 2} // from problem
-	//fmt.Println("Simulate:", sampleSeq, simulate2(sampleSeq))
-	//s2 := []int{11, 14, 59, 6, 38, 19, 44, 53, 39, 60, 54, 24, 57, 12}
-	//fmt.Println("Simulate:", simulate(s2), simulate2(s2))
-
-	// Optimization is not working yet, only looks one-head, produces
-	// decent solution but not the optimum
-	// TODO: Get this working, by implementing some look-ahead, but
-	// not all permutations
-	fmt.Println("Part 1 (s/b 1651, 1647):", optimize3())
-
-	// Brute force: works fine and quicly on the problem sample
-	// (720 permutations), but takes about 20 hours on the full
-	// problem input
-	//tryAll()
+	// Part 1: optimize for only one actor, opening valves connected
+	// by tunnels, so as to maximize total flow
+	fmt.Println("Part 1 (s/b 1651, 1647):", optimize())
 }
 
-func optimize3() int {
+// Optimization for Part 1: simple depth-first dynamic programming solution,
+// recursively tries each feasible candidate unopened valve, excluding
+// those for which we wouldn't have enough time to get any flow.
+func optimize() int {
 
 	// Get list of (indices of) all valves that have flow, since these
 	// are the only ones we care about
@@ -84,13 +72,13 @@ func optimize3() int {
 
 	// Optimize from starting node with all valves that have flow as
 	// candidates for the next move, and return the best result
-	return optimize3a(nodeAA, valves, 1)
+	return optimize1(nodeAA, valves, 1)
 }
 
 // One recursive iteration of the optimization: given that you are
 // at node "here" at time "t", try to open valves in list "candidates"
 // and find the highest cumulative flow.
-func optimize3a(here int, candidates []int, t int) int {
+func optimize1(here int, candidates []int, t int) int {
 
 	// Out of time!
 	if t > 30 {
@@ -102,8 +90,7 @@ func optimize3a(here int, candidates []int, t int) int {
 	candidates = remove(candidates, here) // makes a copy
 
 	// Try each candidate, pruning the ones that would take too
-	// long to reach, and re-using memoized solutions from previous
-	// iterations
+	// long to reach
 	best := 0
 	for _, vi := range candidates {
 
@@ -121,10 +108,10 @@ func optimize3a(here int, candidates []int, t int) int {
 		//fmt.Printf("Opening valve %s (flow %d) at t=%d, creates %d of flow\n",
 		//		nodes[vi].id, nodes[vi].flow, t, thisValveFlow)
 
-		// Simulate moving from this node to the alternative,
+		// Recursively simulate moving from this node to the alternative,
 		// and optimizing from there this node
 		newCand := remove(candidates, vi) // makes a copy
-		o := optimize3a(vi, newCand, t+dist+1)
+		o := optimize1(vi, newCand, t+dist+1)
 
 		// Is this the best found?
 		if thisValveFlow+o > best {
@@ -140,7 +127,6 @@ func shortest(a, b int) int {
 	pair := Pair{a, b}
 	dist, ok := distances[pair]
 	if !ok {
-		//fmt.Println("Calculating", a, b)
 		_, d := graph.ShortestPath(g, a, b)
 		dist = int(d)
 		distances[pair] = dist
