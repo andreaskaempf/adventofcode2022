@@ -149,8 +149,10 @@ see https://adventofcode.com/2022
 
 To compile and run a **Go** program
 * Change into the directory with the program
-* go build day01.go
-* ./day01
+* go mod init day01  (if go.mod does not yet exist)
+* go build
+* ./day01  (or whatever name of the executable)
+* Days 12 and 16 require installing a graph library: `go get github.com/yourbasic/graph`
 
 To run a **Python** program
 * Change into the directory with the program
