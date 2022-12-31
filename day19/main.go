@@ -1,12 +1,21 @@
 // Advent of Code 2022, Day 19
 //
 // Basically a set of optimizations, to find the maximum number of "geodes"
-// that can be produced over 24 periods from a set of four types of "robots".
+// that can be produced over 24 time periods from a set of four types of
+// "robots".
+//
 // Each robot can produce one mineral of its own kind each time period. There
 // are 30 "blueprints" (cost schedules), each of which lists the number of each
 // type of ingredient required to build a robot. So it's a production plan
-// optimization.  Part 1 asks you to optimize all 30 schedules, Part 2 only the
-// first 3 blueprints, but for 32 periods instead of 24.
+// optimization. Part 1 asks you to optimize all 30 "blueprints", Part 2 only
+// the first 3 blueprints, but for 32 periods instead of 24.
+//
+// First attempt was brute force (removed, but still in earlier versions in the
+// repository), got the answer for Part 1 after many hours of execution time.
+// Revisited and wrote as a recursive depth-first search, that stops when a
+// branch fails to achieve the same number of "geodes" as another branch, at
+// the same time in the simulation.  Runs concurrently, takes about .5 seconds
+// for both parts.
 //
 // AK, 19-23 Dec 2022
 
@@ -124,7 +133,8 @@ func optimize1(bp *Blueprint, robots, materials map[string]int, time int) int {
 		return materials0["geode"]
 	}
 
-	// Stop here if number of geodes is not the best achieved so far by this time
+	// Stop here if number of geodes is not the best achieved so far by
+	// this time
 	if materials0["geode"] < bp.bestAt[time] {
 		return 0
 	} else if materials0["geode"] > bp.bestAt[time] {

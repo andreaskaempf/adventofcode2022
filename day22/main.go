@@ -226,7 +226,7 @@ func move(n, x, y, dir int) (int, int, int, byte) {
 
 			if face == 'A' { // now on D, upside down
 				face = 'D'
-				y1 = faceSize - y1
+				y1 = faceSize - y1 + 1
 				x1 = 1   // first column of D
 				dir = 90 // now moving right
 
@@ -243,7 +243,7 @@ func move(n, x, y, dir int) (int, int, int, byte) {
 			} else if face == 'D' { // now on A, upside down
 				face = 'A'
 				x1 = 1
-				y1 = faceSize - y1
+				y1 = faceSize - y1 + 1
 				dir = 90 //  now moving right
 
 			} else if face == 'E' { // now on D, nothing to do
@@ -266,7 +266,7 @@ func move(n, x, y, dir int) (int, int, int, byte) {
 			} else if face == 'B' { // move B to E, upside down
 				face = 'E'
 				x1 = faceSize // right edge
-				y1 = faceSize - y1
+				y1 = faceSize - y1 + 1
 				dir = 270 // now moving left
 
 			} else if face == 'C' {
@@ -282,7 +282,7 @@ func move(n, x, y, dir int) (int, int, int, byte) {
 			} else if face == 'E' { // E -> B, upside down
 				face = 'B'
 				x1 = faceSize
-				y1 = faceSize - y1
+				y1 = faceSize - y1 + 1
 				dir = 270 // moving left
 
 			} else if face == 'F' { // F -> E, rotated 90 degrees
@@ -381,9 +381,47 @@ func move(n, x, y, dir int) (int, int, int, byte) {
 // For part 2
 const faceSize = 50 // width/height of each square face
 
-// Which face (A-F) is a given coordinate on
+// Which face (A-F) is a given absolute coordinate on? Assumes
+// this layout, with each face 50 units square:
+// 1   50 51 100 101-150
+//
+//	      _____ _____
+//	     |     |     |
+//	     |  A  |  B  |
+//	     |_____|_____|
+//	     |     |
+//	     |  C  |
+//	_____|_____|
+// |     |     |
+// |  D  |  E  |
+// |_____|_____|
+// |     |
+// |  F  |
+// |_____|
+//
+// Gives an error if the point is not on a valid face.
+
 func whichFace(x, y int) rune {
-	assert(tiles[Point{x, y}] != 0, "whichFace: point not on map!")
+	faces := [][]int{
+		[]int{51, 100, 1, 50},    // A
+		[]int{101, 150, 1, 50},   // B
+		[]int{51, 100, 51, 100},  // C
+		[]int{1, 50, 101, 150},   // D
+		[]int{51, 100, 101, 150}, // E
+		[]int{1, 50, 151, 200},   // F
+	}
+	for i := 0; i < len(faces); i++ {
+		f := faces[i]
+		if x >= f[0] && x <= f[1] && y >= f[2] && y <= f[3] {
+			return rune(i + 'A')
+		}
+	}
+	fmt.Printf("ERROR: point %d,%d is not on a face\n", x, y)
+	panic("Invalid point")
+}
+
+// Older version, does not give error when a point is out of range
+func whichFaceOld(x, y int) rune {
 	if y <= faceSize {
 		return ifElse(x > faceSize*2, 'B', 'A')
 	} else if y <= faceSize*2 {
@@ -398,12 +436,16 @@ func whichFace(x, y int) rune {
 // Return the relative coordinates, i.e., 1..50, works for any face
 func relCoords(x, y int) (int, int) {
 	assert(tiles[Point{x, y}] != 0, "relCoords: point not on map!")
-	return x % faceSize, y % faceSize
+	//return x % faceSize, y % faceSize
+	return ((x - 1) % faceSize) + 1, ((y - 1) % faceSize) + 1
 }
 
 // Return the absolute coordinates for a pair of 1..50 relative coordinates
 // and a face
 func absCoords(x, y int, face rune) (int, int) {
+
+	x0 := x
+	y0 := y
 
 	// Vertical adjustment
 	if face == 'C' {
@@ -421,8 +463,14 @@ func absCoords(x, y int, face rune) (int, int) {
 		x += faceSize * 2
 	}
 
+	// Check
 	// Return adjusted coordinates
-	assert(tiles[Point{x, y}] != 0, "absCoords: point not on map!")
+	if tiles[Point{x, y}] == 0 {
+		fmt.Printf("absCoords(%d,%d): %d,%d not on map!\n", x0, y0, x, y)
+	}
+	if whichFace(x, y) == 0 {
+		fmt.Printf("absCoords(%d,%d): %d,%d not on a face!\n", x0, y0, x, y)
+	}
 	return x, y
 }
 

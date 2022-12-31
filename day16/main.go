@@ -7,10 +7,11 @@
 // decisions (one for you and one for the "elephant") each time step, over
 // 26 minutes.
 //
-// Used simple depth-first dynamic programming solution,
-// recursively tries each feasible candidate unopened valve, excluding
-// those for which we wouldn't have enough time to get any flow. Same for
-// Part 2, but tried all possible pairs of remaining valves, one for each
+// This is an optimization problem. Used simple depth-first dynamic programming
+// solution, recursively tries each feasible candidate unopened valve
+// (maintained in a list that keeps getting smaller each recursive call)
+// excluding those for which we wouldn't have enough time to get any flow. Same
+// for Part 2, but tried all possible pairs of remaining valves, one for each
 // actor (slow but works).
 //
 // AK, 16 and 26 Dec 2022

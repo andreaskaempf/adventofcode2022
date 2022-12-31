@@ -201,6 +201,6 @@ column is 7, and the final facing is 3, so the final password is 1000 * 5 + 4 *
 Fold the map into a cube, then follow the path given in the monkeys' notes.
 What is the final password?
 
-Answer: 
- 
+Your puzzle answer was 143208.
 
+Both parts of this puzzle are complete! They provide two gold stars: **
